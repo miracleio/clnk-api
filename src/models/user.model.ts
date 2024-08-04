@@ -97,7 +97,7 @@ const userSchema = new mongoose.Schema(
           await initOTPGeneration(email);
 
           return userWithRoles;
-        } catch (error) {
+        } catch (error: any) {
           throw new Error(error);
         }
       },
@@ -126,14 +126,14 @@ const userSchema = new mongoose.Schema(
             throw new Error("User is not verified");
           }
           return user;
-        } catch (error) {
+        } catch (error: any) {
           throw new Error(error);
         }
       },
       async me({ id }: { id: string }) {
         try {
           return this.findById(id);
-        } catch (error) {
+        } catch (error: any) {
           throw new Error(error);
         }
       },
@@ -156,7 +156,7 @@ const userSchema = new mongoose.Schema(
           }
           // update user
           return this.findByIdAndUpdate(id, { name, email }, { new: true });
-        } catch (error) {
+        } catch (error: any) {
           throw new Error(error);
         }
       },
@@ -180,7 +180,7 @@ const userSchema = new mongoose.Schema(
               email,
               picture,
               emailVerified: verified_email,
-              roles: [userRole._id],
+              roles: [userRole?._id],
             },
             { new: true, upsert: true }
           );
@@ -195,7 +195,7 @@ const userSchema = new mongoose.Schema(
           console.log("👤👤👤👤👤 ~ userWithRoles", userWithRoles);
 
           return userWithRoles;
-        } catch (error) {
+        } catch (error: any) {
           console.log("👤👤👤👤👤 ~ error", error);
 
           throw new Error(error.message);

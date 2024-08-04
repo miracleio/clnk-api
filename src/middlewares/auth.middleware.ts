@@ -25,7 +25,7 @@ export const authenticate = (
     const decoded = verifyAccessToken(token);
     req.user = decoded;
     next();
-  } catch (error) {
+  } catch (error: any) {
     console.log("🚨🚨🚨🚨🚨 ~ authenticate error", error.message);
     req.user = null;
     res.status(401).json({ message: "Invalid or expired token" });

@@ -7,12 +7,24 @@ const roleResolvers = {
     },
   },
   Mutation: {
-    createRole: async (_, { name }) => {
+    createRole: async (
+      parent: any,
+      args: { name: string },
+      context: any,
+      info: any
+    ) => {
+      const name = args?.name;
       const role = new Role({ name });
       await role.save();
       return role;
     },
-    deleteRole: async (_, { id }) => {
+    deleteRole: async (
+      parent: any,
+      args: { id: string },
+      context: any,
+      info: any
+    ) => {
+      const id = args?.id;
       return await Role.findByIdAndDelete(id);
     },
   },

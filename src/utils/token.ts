@@ -39,7 +39,7 @@ const generateApiKey = (): string => {
   return crypto.randomBytes(32).toString("hex");
 };
 
-const accessTokenData = (user) => {
+const accessTokenData = (user: any) => {
   return {
     id: user._id,
     email: user.email,

@@ -11,7 +11,12 @@ import {
 
 const googleAuthResolvers = {
   Mutation: {
-    googleAuth: async (parent, args, context, info) => {
+    googleAuth: async (
+      parent: any,
+      args: { code: any },
+      context: any,
+      info: any
+    ) => {
       try {
         const code = args?.code;
 

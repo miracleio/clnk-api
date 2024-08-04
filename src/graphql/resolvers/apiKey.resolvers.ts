@@ -3,7 +3,7 @@ import ApiKey from "../../models/apiKey.model.js";
 import User from "../../models/user.model.js";
 import Role from "../../models/role.model.js";
 
-const checkIfAuthorized = async (context) => {
+const checkIfAuthorized = async (context: { user: { data: any } }) => {
   const contextUser = context?.user?.data;
 
   if (!contextUser?.id) {
@@ -26,30 +26,30 @@ const checkIfAuthorized = async (context) => {
 
 const ApiKeyResolvers = {
   Query: {
-    apiKeys: async (parent, args, context, info) => {
+    apiKeys: async (parent: any, args: any, context: any, info: any) => {
       try {
         await checkIfAuthorized(context);
 
         const apiKeys = await ApiKey.find({}).populate("owner");
         return apiKeys;
-      } catch (error) {
+      } catch (error: any) {
         console.log("Query.apiKeys error", error);
         throw new Error(error);
       }
     },
-    apiKey: async (parent, args, context, info) => {
+    apiKey: async (parent: any, args: { id: any }, context: any, info: any) => {
       try {
         await checkIfAuthorized(context);
 
         return await ApiKey.findById(args.id).populate("owner");
-      } catch (error) {
+      } catch (error: any) {
         console.log("Query.apiKey error", error);
         throw new Error(error);
       }
     },
   },
   Mutation: {
-    generateApiKey: async (parent, args, context, info) => {
+    generateApiKey: async (parent: any, args: any, context: any, info: any) => {
       try {
         const user = await checkIfAuthorized(context);
 
@@ -61,12 +61,17 @@ const ApiKeyResolvers = {
         });
 
         return await newApiKey.populate("owner");
-      } catch (error) {
+      } catch (error: any) {
         console.log("Mutation.generateApiKey error", error);
         throw new Error(error);
       }
     },
-    revokeApiKey: async (parent, args, context, info) => {
+    revokeApiKey: async (
+      parent: any,
+      args: { id: any },
+      context: any,
+      info: any
+    ) => {
       try {
         await checkIfAuthorized(context);
 
@@ -77,7 +82,7 @@ const ApiKeyResolvers = {
 
         await apiKey.deleteOne();
         return "Api Key revoked successfully";
-      } catch (error) {
+      } catch (error: any) {
         console.log("Mutation.revokeApiKey error", error);
         throw new Error(error);
       }

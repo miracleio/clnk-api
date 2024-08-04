@@ -9,27 +9,32 @@ import { initOTPGeneration } from "../../services/otp.services.js";
 
 const OTPResolvers = {
   Query: {
-    otps: async (parent, args, context, info) => {
+    otps: async (parent: any, args: any, context: any, info: any) => {
       try {
         const otps = await OTP.find({});
 
         return otps;
-      } catch (error) {
+      } catch (error: any) {
         console.log("Query.otps error", error);
         throw new Error(error);
       }
     },
-    otp: async (parent, args, context, info) => {
+    otp: async (parent: any, args: { id: any }, context: any, info: any) => {
       try {
         return await OTP.findById(args.id);
-      } catch (error) {
+      } catch (error: any) {
         console.log("Query.otp error", error);
         throw new Error(error);
       }
     },
   },
   Mutation: {
-    sendOTP: async (parent, args, context, info) => {
+    sendOTP: async (
+      parent: any,
+      args: { input: { email: any } },
+      context: any,
+      info: any
+    ) => {
       try {
         console.log("args", args);
 
@@ -41,12 +46,17 @@ const OTPResolvers = {
         console.log({ response });
 
         return `OTP sent to ${email} successfully`;
-      } catch (error) {
+      } catch (error: any) {
         console.log("Mutation.sendOTP error", error);
         throw new Error(error);
       }
     },
-    verifyOTP: async (parent, args, context, info) => {
+    verifyOTP: async (
+      parent: any,
+      args: { input: { email: any; otp: any } },
+      context: any,
+      info: any
+    ) => {
       try {
         console.log("args", args);
 
@@ -71,7 +81,7 @@ const OTPResolvers = {
 
         // await OTP.deleteOne({ email, otp });
         return true;
-      } catch (error) {
+      } catch (error: any) {
         console.log("Mutation.verifyOTP error", error);
         throw new Error(error);
       }

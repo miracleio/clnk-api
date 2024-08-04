@@ -21,13 +21,18 @@ const urlTypeDefs = `#graphql
     user: ID
   }
 
+  input CreateUrlUrlInput {
+    url: String!
+    code: String
+  }
+
   type Query {
     getUrl(id: ID!): Url
     getUrls(pagination: Pagination, filter: UrlFilter): UrlData
   }
 
   type Mutation {
-    createUrl(url: String!): Url
+    createUrl(input: CreateUrlUrlInput!): Url
     updateUrl(id: ID!, url: String!): Url
     deleteUrl(id: ID!): Boolean
   }

@@ -6,6 +6,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 // This is the connection to the database
 const connectDB = async () => {
+  if (!MONGO_URI) throw new Error("Mongo URI is missing");
   try {
     await mongoose.connect(MONGO_URI).then(() => {
       console.log("MongoDB is connected");

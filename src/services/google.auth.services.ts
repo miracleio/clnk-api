@@ -2,9 +2,9 @@ import { config } from "dotenv";
 import { AccessTokenResponse, GoogleUser } from "../types/user";
 config();
 
-const client_id = process.env.GOOGLE_CLIENT_ID;
-const client_secret = process.env.GOOGLE_CLIENT_SECRET;
-const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URI;
+const client_id = process.env.GOOGLE_CLIENT_ID || "";
+const client_secret = process.env.GOOGLE_CLIENT_SECRET || "";
+const redirect_uri = process.env.GOOGLE_OAUTH_REDIRECT_URI || "";
 
 const getGoogleOAuthTokens: (args: {
   code: string;
@@ -53,7 +53,7 @@ const getGoogleUser: (args: {
       }
     );
     return res.json();
-  } catch (error) {
+  } catch (error: any) {
     console.log("error", error.message);
 
     return error;

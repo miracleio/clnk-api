@@ -8,7 +8,7 @@ config();
 
 const { verify } = pkg;
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 const getUserFromToken = async (token: string) => {
   try {

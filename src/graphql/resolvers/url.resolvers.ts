@@ -3,16 +3,29 @@ import { shortenURL } from "../../services/url.services.js";
 
 const URLResolvers = {
   Query: {
-    getUrl: async (parent, args, context, info) => {
+    getUrl: async (parent: any, args: { id: any }, context: any, info: any) => {
       try {
         const id = args.id;
         return await URL.findById(id);
-      } catch (error) {
+      } catch (error: any) {
         console.log("Query.getUrl error", error);
         throw new Error(error);
       }
     },
-    getUrls: async (parent, args, context, info) => {
+    getUrls: async (
+      parent: any,
+      args: {
+        pagination: { page: number; limit: number };
+        filters: {
+          url: string;
+          shortUrl: string;
+          code: string;
+          user: string;
+        };
+      },
+      context: any,
+      info: any
+    ) => {
       try {
         const pagination = args.pagination || {};
         const filters = args.filters || {};
@@ -51,41 +64,57 @@ const URLResolvers = {
           data: urls,
           meta,
         };
-      } catch (error) {
+      } catch (error: any) {
         console.log("Query.getUrls error", error);
         throw new Error(error);
       }
     },
   },
   Mutation: {
-    createUrl: async (parent, args, context, info) => {
+    createUrl: async (
+      parent: any,
+      args: { input: { url: any; code: any } },
+      context: { user: { data: { id: any } } },
+      info: any
+    ) => {
       try {
-        const url = args.url;
-        const userId = context.user.data.id;
+        const url = args?.input?.url;
+        const code = args?.input?.code;
+        const userId = context?.user?.data?.id;
 
-        return shortenURL(url, userId);
-      } catch (error) {
+        return shortenURL({ url, userId, code });
+      } catch (error: any) {
         console.log("Mutation.createUrl error", error);
         throw new Error(error);
       }
     },
-    updateUrl: async (parent, args, context, info) => {
+    updateUrl: async (
+      parent: any,
+      args: { id: any; url: any },
+      context: any,
+      info: any
+    ) => {
       try {
         const { id, url } = args;
         return await URL.findByIdAndUpdate(id, { url }, { new: true }).populate(
           "user"
         );
-      } catch (error) {
+      } catch (error: any) {
         console.log("Mutation.updateUrl error", error);
         throw new Error(error);
       }
     },
-    deleteUrl: async (parent, args, context, info) => {
+    deleteUrl: async (
+      parent: any,
+      args: { id: any },
+      context: any,
+      info: any
+    ) => {
       try {
         const { id } = args;
         await URL.findByIdAndDelete(id);
         return true;
-      } catch (error) {
+      } catch (error: any) {
         console.log("Mutation.deleteUrl error", error);
         throw new Error(error);
       }

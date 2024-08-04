@@ -57,7 +57,7 @@ const sendVerificationMail = async (email: string, otp: string) => {
     );
 
     return mailResponse;
-  } catch (error) {
+  } catch (error: any) {
     throw new Error(error);
   }
 };
@@ -89,7 +89,7 @@ const initOTPGeneration = async (email: string) => {
     // const mailResponse = await sendVerificationMail(email, otp);
 
     return OTPObject;
-  } catch (error) {
+  } catch (error: any) {
     console.log({ error });
 
     throw new Error(error);

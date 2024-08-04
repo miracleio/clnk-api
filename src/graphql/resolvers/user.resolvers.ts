@@ -7,13 +7,24 @@ import {
   createRefreshToken,
   verifyRefreshToken,
 } from "../../utils/token.js";
+import { UpdateQuery, Types } from "mongoose";
 
 const { sign } = pkg;
 config();
 
 const userResolvers = {
   Query: {
-    users: async (parent, args, context, info) => {
+    users: async (
+      parent: any,
+      args: {
+        pagination: {
+          page: number;
+          limit: number;
+        };
+      },
+      context: any,
+      info: any
+    ) => {
       try {
         const pagination = args.pagination || {};
         let { page = 1, limit = 10 } = pagination;
@@ -40,7 +51,7 @@ const userResolvers = {
         throw error;
       }
     },
-    user: async (parent, args, context, info) => {
+    user: async (parent: any, args: { id: any }, context: any, info: any) => {
       try {
         return await User.findById(args.id).populate("roles");
       } catch (error) {
@@ -48,7 +59,12 @@ const userResolvers = {
         throw error;
       }
     },
-    me: async (parent, args, context, info) => {
+    me: async (
+      parent: any,
+      args: any,
+      context: { user: { data: { id: any } } },
+      info: any
+    ) => {
       const id = context?.user?.data?.id;
 
       if (!id) {
@@ -64,16 +80,26 @@ const userResolvers = {
     },
   },
   Mutation: {
-    register: async (parent, args, context, info) => {
+    register: async (
+      parent: any,
+      args: { input: { name: string; email: string; password: string } },
+      context: any,
+      info: any
+    ) => {
       try {
-        const user = (await User.registerUser(args.input)).populate("roles");
+        const user = (await User.registerUser(args.input))?.populate("roles");
         return { user };
       } catch (error) {
         console.log("Mutation.register error", error);
         throw error;
       }
     },
-    login: async (parent, args, context, info) => {
+    login: async (
+      parent: any,
+      args: { input: { email: string; password: string } },
+      context: any,
+      info: any
+    ) => {
       try {
         const user = await User.loginUser(args.input);
         const accessToken = createAccessToken(accessTokenData(user));
@@ -84,7 +110,12 @@ const userResolvers = {
         throw error;
       }
     },
-    refreshToken: async (parent, { token }, context, info) => {
+    refreshToken: async (
+      parent: any,
+      { token }: any,
+      context: any,
+      info: any
+    ) => {
       try {
         const decoded = verifyRefreshToken(token);
         console.log({ decoded });
@@ -96,7 +127,24 @@ const userResolvers = {
         throw new Error("Invalid refresh token");
       }
     },
-    updateUser: async (parent, args, context, info) => {
+    updateUser: async (
+      parent: any,
+      args: {
+        input:
+          | UpdateQuery<{
+              name: string;
+              count: number;
+              roles: Types.ObjectId[];
+              email: string;
+              password: string;
+              emailVerified: boolean;
+              picture?: string | null | undefined;
+            }>
+          | undefined;
+      },
+      context: { user: { id: any } },
+      info: any
+    ) => {
       try {
         return await User.findByIdAndUpdate(context.user.id, args.input, {
           new: true,
@@ -106,7 +154,12 @@ const userResolvers = {
         throw error;
       }
     },
-    deleteUser: async (parent, args, context, info) => {
+    deleteUser: async (
+      parent: any,
+      args: { id: any },
+      context: { user: { id: any } },
+      info: any
+    ) => {
       try {
         const id = args.id || context.user.id;
         return await User.findByIdAndDelete(id);
