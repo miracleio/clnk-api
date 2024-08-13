@@ -101,9 +101,9 @@ const userResolvers = {
       info: any
     ) => {
       try {
-        const user = await User.loginUser(args.input);
+        const user = await (await User.loginUser(args.input)).populate("roles");
         const accessToken = createAccessToken(accessTokenData(user));
-        const refreshToken = createRefreshToken({ id: user._id });
+        const refreshToken = createRefreshToken({ id: user.id });
         return { accessToken, refreshToken, user };
       } catch (error) {
         console.log("Mutation.login error", error);

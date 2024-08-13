@@ -29,6 +29,7 @@ const urlTypeDefs = `#graphql
   type Query {
     getUrl(id: ID!): Url
     getUrls(pagination: Pagination, filter: UrlFilter): UrlData
+    getAllUrls(pagination: Pagination, filter: UrlFilter): UrlData
   }
 
   type Mutation {

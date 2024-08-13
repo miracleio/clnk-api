@@ -28,6 +28,13 @@ const shortenURL = async ({
       console.log("🚨🚨🚨🚨🚨 ~ error: User does not exist");
     }
 
+    // check if code provided already exists
+    const existingURL = await URL.findOne({ code });
+
+    if (existingURL) {
+      throw new Error("Code already exists");
+    }
+
     const URLCode = code ? code : nanoid(6);
     const shortUrl = `${BASE_URL}/${URLCode}`;
 

@@ -29,6 +29,69 @@ const URLResolvers = {
       try {
         const pagination = args.pagination || {};
         const filters = args.filters || {};
+        const userId = context?.user?.data?.id;
+
+        if (!userId) throw new Error("Unauthorized");
+
+        let { page = 1, limit = 10 } = pagination;
+        const skip = (page - 1) * limit;
+
+        const constructedFilters: any = {};
+
+        filters.url &&
+          (constructedFilters.url = { $regex: filters.url, $options: "i" });
+        filters.shortUrl &&
+          (constructedFilters.shortUrl = {
+            $regex: filters.shortUrl,
+            $options: "i",
+          });
+        // match code exactly
+        filters.code && (constructedFilters.code = filters.code);
+        // filters.user && (constructedFilters.user = filters.user);
+
+        const urls = await URL.find({ ...constructedFilters, user: userId })
+          .limit(limit)
+          .skip(skip)
+          .populate("user");
+        const totalCount = await URL.countDocuments({
+          ...constructedFilters,
+          user: userId,
+        });
+        const pages = Math.ceil(totalCount / limit);
+
+        const meta = {
+          page,
+          limit,
+          total: totalCount,
+          pages: pages,
+        };
+
+        return {
+          data: urls,
+          meta,
+        };
+      } catch (error: any) {
+        console.log("Query.getUrls error", error);
+        throw new Error(error);
+      }
+    },
+    getAllUrls: async (
+      parent: any,
+      args: {
+        pagination: { page: number; limit: number };
+        filters: {
+          url: string;
+          shortUrl: string;
+          code: string;
+          user: string;
+        };
+      },
+      context: any,
+      info: any
+    ) => {
+      try {
+        const pagination = args.pagination || {};
+        const filters = args.filters || {};
 
         let { page = 1, limit = 10 } = pagination;
         const skip = (page - 1) * limit;

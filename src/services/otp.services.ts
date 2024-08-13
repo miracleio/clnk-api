@@ -18,8 +18,8 @@ const sendVerificationMail = async (email: string, otp: string) => {
       style="
         text-align: center;
         padding: 20px;
-        background-color: #4f46e5;
-        color: #ECFDF;
+        background-color: #0F766E;
+        color: #CCFBF1;
         height: 100vh;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
           Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue',
@@ -34,6 +34,8 @@ const sendVerificationMail = async (email: string, otp: string) => {
             height: 32px;
             display: inline-block;
             vertical-align: middle;
+            color: #CCFBF1;
+
           "
         >
           <img
@@ -44,11 +46,11 @@ const sendVerificationMail = async (email: string, otp: string) => {
             height="32"
           />
         </div>
-        <span style="margin-left: 0.5rem; font-size: large; font-weight: 700">
+        <span style="margin-left: 0.5rem; font-size: large; font-weight: 700; color: #CCFBF1;">
           ${APP_NAME}
         </span>
       </div>
-      <div style="text-align: center; padding-top: 4rem; padding-bottom: 4rem">
+      <div style="text-align: center; padding-top: 4rem; padding-bottom: 4rem; color: #CCFBF1;">
         <h1>Email Verification</h1>
         <p>Your OTP is: <strong>${otp}</strong></p>
       </div>
