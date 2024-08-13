@@ -7,6 +7,7 @@ const urlTypeDefs = `#graphql
     code: String
     user: User
     createdAt: String
+    updatedAt: String
   }
 
   type UrlData {

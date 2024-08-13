@@ -50,6 +50,9 @@ const URLResolvers = {
         // filters.user && (constructedFilters.user = filters.user);
 
         const urls = await URL.find({ ...constructedFilters, user: userId })
+          .sort({
+            updatedAt: -1,
+          })
           .limit(limit)
           .skip(skip)
           .populate("user");
