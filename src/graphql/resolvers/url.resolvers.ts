@@ -3,9 +3,20 @@ import { shortenURL } from "../../services/url.services.js";
 
 const URLResolvers = {
   Query: {
-    getUrl: async (parent: any, args: { id: any }, context: any, info: any) => {
+    getUrl: async (
+      parent: any,
+      args: { id: string; code: string },
+      context: any,
+      info: any
+    ) => {
       try {
         const id = args.id;
+        const code = args.code;
+        if (code) {
+          return await URL.findOne({
+            code,
+          }).populate("user");
+        }
         return await URL.findById(id);
       } catch (error: any) {
         console.log("Query.getUrl error", error);

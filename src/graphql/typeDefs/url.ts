@@ -28,7 +28,7 @@ const urlTypeDefs = `#graphql
   }
 
   type Query {
-    getUrl(id: ID!): Url
+    getUrl(id: ID, code: String): Url
     getUrls(pagination: Pagination, filter: UrlFilter): UrlData
     getAllUrls(pagination: Pagination, filter: UrlFilter): UrlData
   }
