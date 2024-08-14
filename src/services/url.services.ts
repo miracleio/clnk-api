@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import URL from "../models/url.model.js";
 import User from "../models/user.model.js";
 
-const BASE_URL = process.env.APP_URL || "http://localhost:8000";
+const APP_URL = process.env.APP_URL || "http://localhost:8000";
 
 const shortenURL = async ({
   url,
@@ -36,7 +36,7 @@ const shortenURL = async ({
     }
 
     const URLCode = code ? code : nanoid(6);
-    const shortUrl = `${BASE_URL}/${URLCode}`;
+    const shortUrl = `${APP_URL}/${URLCode}`;
 
     const shortURL = (
       await URL.create({
