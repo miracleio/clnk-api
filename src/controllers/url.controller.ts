@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { findOriginalUrl } from "../services/url.services.js";
 
-const APP_URL = process.env.BASE_URL || "http://localhost:3000";
+const APP_URL = process.env.APP_URL || "http://localhost:3000";
 
 const redirect = async (req: Request, res: Response) => {
   const { code } = req.params;
