@@ -2,7 +2,7 @@ import { nanoid } from "nanoid";
 import URL from "../models/url.model.js";
 import User from "../models/user.model.js";
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:8000";
+const BASE_URL = process.env.APP_URL || "http://localhost:8000";
 
 const shortenURL = async ({
   url,
