@@ -168,12 +168,14 @@ const URLResolvers = {
     },
     updateUrl: async (
       parent: any,
-      args: { id: string; url: string; shortUrl: string; image: string },
+      args: {
+        input: { id: string; url: string; shortUrl: string; image: string };
+      },
       context: any,
       info: any
     ) => {
       try {
-        const { id, url, shortUrl, image } = args;
+        const { id, url, shortUrl, image } = args.input;
         return await URL.findByIdAndUpdate(
           id,
           { url, shortUrl, image },
