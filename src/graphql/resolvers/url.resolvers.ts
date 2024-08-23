@@ -151,7 +151,7 @@ const URLResolvers = {
   Mutation: {
     createUrl: async (
       parent: any,
-      args: { input: { url: any; code: any } },
+      args: { input: { url: any; code: any; image: string; shorten: boolean } },
       context: { user: { data: { id: any } } },
       info: any
     ) => {
@@ -159,8 +159,10 @@ const URLResolvers = {
         const url = args?.input?.url;
         const code = args?.input?.code;
         const userId = context?.user?.data?.id;
+        const image = args?.input?.image;
+        const shorten = args?.input?.shorten;
 
-        return shortenURL({ url, userId, code });
+        return shortenURL({ url, userId, code, image, shorten });
       } catch (error: any) {
         console.log("Mutation.createUrl error", error);
         throw new Error(error);

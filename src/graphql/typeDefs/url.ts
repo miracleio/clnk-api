@@ -28,6 +28,7 @@ const urlTypeDefs = `#graphql
     code: String
     shortUrl: String
     image: String
+    shorten: Boolean
   }
 
   input UpdateUrlInput {
