@@ -14,6 +14,12 @@ const URLSchema = new Schema({
     required: true,
     unique: true,
   },
+  image: {
+    type: String,
+    required: false,
+    default:
+      "https://res.cloudinary.com/alphas/image/upload/v1723571495/clnk/clnk-icon_2x_qdqhjl.png",
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: "User",

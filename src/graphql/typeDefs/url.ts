@@ -5,6 +5,7 @@ const urlTypeDefs = `#graphql
     url: String!
     shortUrl: String!
     code: String
+    image: String
     user: User
     createdAt: String
     updatedAt: String
@@ -22,9 +23,18 @@ const urlTypeDefs = `#graphql
     user: ID
   }
 
-  input CreateUrlUrlInput {
+  input CreateUrlInput {
     url: String!
     code: String
+    shortUrl: String
+    image: String
+  }
+
+  input UpdateUrlInput {
+    id: ID!,
+    url: String!
+    shortUrl: String
+    image: String
   }
 
   type Query {
@@ -34,8 +44,8 @@ const urlTypeDefs = `#graphql
   }
 
   type Mutation {
-    createUrl(input: CreateUrlUrlInput!): Url
-    updateUrl(id: ID!, url: String!): Url
+    createUrl(input: CreateUrlInput!): Url
+    updateUrl(input: UpdateUrlInput!): Url
     deleteUrl(id: ID!): Boolean
   }
 `;

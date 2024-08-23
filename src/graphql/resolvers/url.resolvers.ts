@@ -124,6 +124,7 @@ const URLResolvers = {
         filters.user && (constructedFilters.user = filters.user);
 
         const urls = await URL.find(constructedFilters)
+          .sort({ updatedAt: -1 })
           .limit(limit)
           .skip(skip)
           .populate("user");
@@ -167,15 +168,17 @@ const URLResolvers = {
     },
     updateUrl: async (
       parent: any,
-      args: { id: any; url: any },
+      args: { id: string; url: string; shortUrl: string; image: string },
       context: any,
       info: any
     ) => {
       try {
-        const { id, url } = args;
-        return await URL.findByIdAndUpdate(id, { url }, { new: true }).populate(
-          "user"
-        );
+        const { id, url, shortUrl, image } = args;
+        return await URL.findByIdAndUpdate(
+          id,
+          { url, shortUrl, image },
+          { new: true }
+        ).populate("user");
       } catch (error: any) {
         console.log("Mutation.updateUrl error", error);
         throw new Error(error);
