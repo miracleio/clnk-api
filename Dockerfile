@@ -4,8 +4,10 @@ FROM node:lts AS build
 # Set working directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
+# Copy package.json and package-lock.json
 COPY package*.json ./
+
+# Install dependencies
 RUN npm ci
 
 # Copy the rest of the application code
@@ -25,6 +27,7 @@ WORKDIR /usr/src/app
 
 # Copy only necessary files from the build stage
 COPY --from=build /usr/src/app/package.json ./
+COPY --from=build /usr/src/app/package-lock.json ./
 COPY --from=build /usr/src/app/dist ./dist
 
 # Install production dependencies
