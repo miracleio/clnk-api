@@ -1,4 +1,4 @@
-FROM node:lts as builder
+FROM node:lts as build
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -25,7 +25,7 @@ COPY package*.json ./
 
 RUN npm ci --production
 
-COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/dist ./dist
 
 EXPOSE 8080
 CMD [ "node", "dist/index.js" ]
