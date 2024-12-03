@@ -1,12 +1,10 @@
-# version: "3.7"
 services:
   api:
     build:
       context: .
       dockerfile: Dockerfile
-      target: production
     ports:
-      - 8000:8000
+      - "8000:8000"
     environment:
       - PORT=${PORT}
       - MONGO_URI=${MONGO_URI}

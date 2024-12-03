@@ -1,43 +1,31 @@
-# Build Stage
-FROM node:lts AS build
+FROM node:lts as builder
 
-# Set working directory
+# Create app directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json
+# Install app dependencies
 COPY package*.json ./
 
-# Install dependencies (including devDependencies)
 RUN npm ci
 
-# Copy application code
 COPY . .
 
-# Compile the TypeScript code
-RUN npx tsc
+RUN npm run compile
 
-# Production Stage
-FROM node:lts-slim AS production
+FROM node:lts-slim
 
-# Set environment
 ENV NODE_ENV production
-
-# Set working directory
-WORKDIR /usr/src/app
-
-# Copy only necessary files from the build stage
-COPY --from=build /usr/src/app/package.json ./
-COPY --from=build /usr/src/app/package-lock.json ./
-COPY --from=build /usr/src/app/dist ./dist
-
-# Install production dependencies
-RUN npm ci --production
-
-# Use non-root user
 USER node
 
-# Expose the application port
-EXPOSE 8080
+# Create app directory
+WORKDIR /usr/src/app
 
-# Start the application
+# Install app dependencies
+COPY package*.json ./
+
+RUN npm ci --production
+
+COPY --from=builder /usr/src/app/dist ./dist
+
+EXPOSE 8080
 CMD [ "node", "dist/index.js" ]
