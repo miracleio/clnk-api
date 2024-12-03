@@ -1,9 +1,28 @@
 # version: "3.7"
 services:
- api:
-  build:
-   context: .
-   target: production
+  api:
+    build:
+      context: .
+      target: production
 
-  ports:
-   - 8000:8000
+    ports:
+      - 8000:8000
+    environment:
+      - PORT=${PORT}
+      - MONGO_URI=${MONGO_URI}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET}
+      - REFRESH_TOKEN_SECRET=${REFRESH_TOKEN_SECRET}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USER=${MAIL_USER}
+      - MAIL_PASS=${MAIL_PASS}
+      - MAIL_LOGO=${MAIL_LOGO}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_OAUTH_REDIRECT_URI=${GOOGLE_OAUTH_REDIRECT_URI}
+      - BASE_URL=${BASE_URL}
+      - APP_URL=${APP_URL}
+      - APP_NAME=${APP_NAME}
+      - WEBHOOK_SECRET=${WEBHOOK_SECRET}
+    env_file:
+      - .env
