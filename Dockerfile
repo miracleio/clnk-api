@@ -12,7 +12,7 @@ COPY . .
 
 RUN npm run compile
 
-FROM node:lts-slim
+FROM node:lts-slim as production
 
 ENV NODE_ENV production
 USER node
