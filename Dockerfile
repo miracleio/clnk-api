@@ -7,14 +7,14 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies (including devDependencies)
 RUN npm ci
 
-# Copy the rest of the application code
+# Copy application code
 COPY . .
 
 # Compile the TypeScript code
-RUN npm run compile
+RUN npx tsc
 
 # Production Stage
 FROM node:lts-slim AS production
@@ -33,7 +33,7 @@ COPY --from=build /usr/src/app/dist ./dist
 # Install production dependencies
 RUN npm ci --production
 
-# Switch to non-root user
+# Use non-root user
 USER node
 
 # Expose the application port
