@@ -2,22 +2,24 @@ import { nanoid } from "nanoid";
 import URL from "../models/url.model.js";
 import User from "../models/user.model.js";
 
-const APP_URL = process.env.APP_URL || "http://localhost:8000";
-
-const shortenURL = async ({
-  url,
-  userId,
-  code,
-}: {
-  url: string;
+type URLType = {
+  url?: string;
   userId?: string;
   code?: string;
-}) => {
+  image?: string;
+  shorten?: boolean;
+};
+
+const APP_URL = process.env.APP_URL || "http://localhost:8000";
+
+const shortenURL = async ({ url, userId, code, image, shorten }: URLType) => {
   try {
     console.log("🪵🪵🪵🪵🪵", {
       url,
       userId,
       code,
+      image,
+      shorten,
     });
 
     // check if user exists
@@ -36,16 +38,19 @@ const shortenURL = async ({
     }
 
     const URLCode = code ? code : nanoid(6);
-    const shortUrl = `${APP_URL}/${URLCode}`;
+    const shortUrl = shorten ? `${APP_URL}/${URLCode}` : url;
 
-    const shortURL = (
-      await URL.create({
-        url,
-        shortUrl,
-        code: URLCode,
-        user: userId,
-      })
-    ).populate("user");
+    const obj: URLType & { shortUrl?: string; user?: string } = {};
+
+    url && (obj.url = url);
+    userId && (obj.user = userId);
+    URLCode && (obj.code = URLCode);
+    image && (obj.image = image);
+    shortUrl && (obj.shortUrl = shortUrl);
+
+    console.log("🪵🪵🪵🪵🪵 ~ obj", obj);
+
+    const shortURL = (await URL.create(obj)).populate("user");
 
     return shortURL;
   } catch (error: any) {

@@ -124,6 +124,7 @@ const URLResolvers = {
         filters.user && (constructedFilters.user = filters.user);
 
         const urls = await URL.find(constructedFilters)
+          .sort({ updatedAt: -1 })
           .limit(limit)
           .skip(skip)
           .populate("user");
@@ -150,7 +151,7 @@ const URLResolvers = {
   Mutation: {
     createUrl: async (
       parent: any,
-      args: { input: { url: any; code: any } },
+      args: { input: { url: any; code: any; image: string; shorten: boolean } },
       context: { user: { data: { id: any } } },
       info: any
     ) => {
@@ -158,8 +159,10 @@ const URLResolvers = {
         const url = args?.input?.url;
         const code = args?.input?.code;
         const userId = context?.user?.data?.id;
+        const image = args?.input?.image;
+        const shorten = args?.input?.shorten;
 
-        return shortenURL({ url, userId, code });
+        return shortenURL({ url, userId, code, image, shorten });
       } catch (error: any) {
         console.log("Mutation.createUrl error", error);
         throw new Error(error);
@@ -167,15 +170,19 @@ const URLResolvers = {
     },
     updateUrl: async (
       parent: any,
-      args: { id: any; url: any },
+      args: {
+        input: { id: string; url: string; shortUrl: string; image: string };
+      },
       context: any,
       info: any
     ) => {
       try {
-        const { id, url } = args;
-        return await URL.findByIdAndUpdate(id, { url }, { new: true }).populate(
-          "user"
-        );
+        const { id, url, shortUrl, image } = args.input;
+        return await URL.findByIdAndUpdate(
+          id,
+          { url, shortUrl, image },
+          { new: true }
+        ).populate("user");
       } catch (error: any) {
         console.log("Mutation.updateUrl error", error);
         throw new Error(error);
