@@ -19,7 +19,7 @@ const URLSchema = new Schema(
       type: String,
       required: false,
       default:
-        "https://res.cloudinary.com/alphas/image/upload/v1723571495/clnk/clnk-icon_2x_qdqhjl.png",
+        "https://res.cloudinary.com/clnk/image/upload/v1737550227/clnk-icon_2x_ymydvz.png",
     },
     user: {
       type: Schema.Types.ObjectId,
