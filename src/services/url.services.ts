@@ -12,7 +12,13 @@ type URLType = {
 
 const APP_URL = process.env.APP_URL || "http://localhost:8000";
 
-const shortenURL = async ({ url, userId, code, image, shorten }: URLType) => {
+const shortenURL = async ({
+  url,
+  userId,
+  code,
+  image,
+  shorten = true,
+}: URLType) => {
   try {
     console.log("🪵🪵🪵🪵🪵", {
       url,
