@@ -2,6 +2,8 @@ import { Request } from "express";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
+
 import express from "express";
 import http from "http";
 import cors from "cors";
@@ -36,7 +38,10 @@ const httpServer = http.createServer(app);
 const server = new ApolloServer<MyContext>({
   typeDefs,
   resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
+    ApolloServerPluginLandingPageLocalDefault(),
+  ],
   introspection: true,
 });
 // Ensure we wait for our server to start
@@ -68,7 +73,7 @@ app.use(
       // add the user to the context
       return { user };
     },
-  })
+  }),
 );
 
 // routes
@@ -79,6 +84,6 @@ connectDB();
 
 // Modified server startup
 await new Promise<void>((resolve) =>
-  httpServer.listen({ port: PORT }, resolve)
+  httpServer.listen({ port: PORT }, resolve),
 );
 console.log(`🚀 Server ready at http://localhost:${PORT}/`);
